@@ -11,3 +11,277 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.top-parent {
+  margin: auto;
+  width: 25%;
+  border: 2px solid #f1f1f1;
+  background: #ECF6FC;
+  padding: 10px;
+  margin-top: 5%;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.inner-parent {
+  margin: 0;
+    margin-left: -10px;
+    margin-right: -10px;
+    background: #F8F9FA;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #f1f1f1;
+}
+.header {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  width: 100%;
+}
+.headerspan {
+  float: left;
+  padding-left: 20px;
+}
+.buttonToggle {
+  float: right;
+  margin-top: -11px;
+  height: 40px;
+  background: transparent;
+  border: none;
+  padding-left: 15px;
+  padding-right: 15px;
+  border-left: 2px solid #f1f1f1;
+  cursor: pointer;
+}
+.buttonToggleParent:hover .tooltiptext{
+  visibility: visible;
+}
+.buttonToggleParent .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: black transparent transparent transparent;
+}
+.buttonToggleParent .tooltiptext {
+  visibility: hidden;
+  width: 73px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  font-size: 12px;
+  bottom: 91%;
+  /* bottom: 150%; */
+  left: 58.5%;
+}
+
+.tasks {
+  background: white;
+    margin-left: -10px;
+    border: 1px solid #f1f1f1;
+    border-left: none;
+    padding-top: 10px;
+    border-right: none;
+    padding-bottom: 10px;
+    margin-right: -10px;
+    display: flex;
+}
+.task-buttons {
+  padding-top: 7px;
+}
+.task-span {
+  width: 60%;
+}
+.task-desc {
+  float: left;
+  padding-left: 22px;
+  display: flex;
+}
+.notification {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 8px;
+  padding-right: 8px;
+  background: white;
+  border-radius: 3px;
+  border: 1px solid #8a8a8a;
+}
+.editBUtton {
+  margin-right: 25px;
+  cursor: pointer;
+}
+.tasksHeader{
+  display: grid;
+  padding: 10px;
+  font-size: 14px;
+}
+.task-desc-header {
+  width: 100%;
+  text-align: initial;
+  padding-bottom: 8px;
+  font-size: 14px;
+}
+.count {
+  color: #a6a6a6;
+  font-weight: bold;
+}
+.task-name {
+  height: 30px;
+    border: none;
+    padding-left: 11px;
+    width: 90%;
+    margin-left: -20px;
+    margin-right: -33px;
+    width: 95%;
+
+}
+.task-name:focus {
+  outline: none !important;
+    border:1px solid #719ECE;
+    box-shadow: 0 0 5px #719ECE;
+}
+.task-text-alone {
+  padding-left: 10px;
+  width: 145px;
+  overflow: auto;
+  text-align: initial;
+}
+.task-date-alone {
+  font-weight: 500;
+  color: red;
+  font-size: 12px;
+}
+.inputWithicon1 {
+  background: white;
+    height: 35px;
+    border: 2px solid #EEF2F4;
+    border-radius: 5px;
+}
+.dateandtime {
+  display: flex;
+}
+.inputdate {
+  width: 90%;
+  margin-left: 10px;
+  height: 30px;
+  padding-left: 8px;
+  border: none;
+}
+.inputdate:focus {
+  outline: none !important;
+    border:1px solid #719ECE;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    box-shadow: 0 0 5px 0 #719ECE;
+}
+.dateParent {
+  display: inline-flex;
+  padding-top: 0px;
+  width: 81%;
+  margin-top: 2px;
+  height: 32px;
+  background: white;
+  border: 2px solid #EEF2F4;
+  border-radius: 3px;
+  border: 2px solid #EEF2F4;
+  border-radius: 3px;
+  margin-left: -7px;
+}
+.calender {
+  background: white;
+  padding-left: 7px;
+  padding-top: 5px;
+}
+.inputime {
+  width: 85%;
+  height: 30px;
+  border: 2px solid #EEF2F4;
+  border-radius: 3px;
+}
+.timeInput {
+    width: 83%;
+    height: 30px;
+    border: none;
+    /* border: 2px solid #EEF2F4;
+    border-radius: 3px; */
+}
+.timeInput:focus {
+  outline: none !important;
+  border:1px solid #719ECE;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  box-shadow: 0 0 5px #719ECE;
+}
+.timetext {
+  float: left;
+  padding-left: 11px;
+  font-size: 14px;
+  padding-bottom: 3px;
+}
+.timeDiv{
+  display: inline-flex;
+    background: white;
+    border: 2px solid #EEF2F4;
+    border-radius: 3px;
+    width: 86%;
+    margin-top: 2px;
+}
+.clockClass {
+  padding-left: 8px;
+  padding-top: 5px;
+  padding-right: 8px;
+}
+.lableDate {
+  float: left;
+  padding-left: 11px;
+  font-size: 14px;
+  padding-bottom: 3px;
+}
+.lableTime {
+  float: left;
+  padding-left: 9px;
+}
+.actionButtons {
+  padding-top: 10px;
+    padding-bottom: 20px;
+    float: right;
+    text-align: right;
+    margin-right: 10px;
+    width: 100%;
+}
+.saveButton {
+  padding: 6px 20px 6px 20px;
+    background: #3DAB7E;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+}
+.cancelButtons{
+  background: transparent;
+    border: none;
+    margin-right: 10px;
+    cursor: pointer;
+}
+.editSubmit {
+  padding: 6px 20px 6px 20px;
+    background: #3DAB7E;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+}
+.deleteButton {
+  float: left;
+  margin-left: 25px;
+  background: transparent;
+    border: none;
+    padding-top: 7px;
+    cursor: pointer;
+}

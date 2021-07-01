@@ -67,7 +67,8 @@ export default (state = initialState, actions) => {
         case EDIT_A_TASK:
             const updateId = state.data.data.results.id;
             const newStatee = state.task.results.filter(task => task.id !== updateId);
-            return newStatee;
+            console.log('aaaaaaacccco',state,actions)
+            return {...newStatee,actions};
         case ADD_NEW_TASK:
             requestAddTask(actions.payload);
             return state;

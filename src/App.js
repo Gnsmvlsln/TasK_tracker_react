@@ -1,12 +1,14 @@
 import './App.css';
 import { Tasks } from './components/Tasks';
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import axios from 'axios';
 import { useDispatch } from "react-redux";
 import { get_task } from "./redux/reducers/tasks";
 
 function App() {
 
+  const [dropdown, setDropdown] = useState([]);
+  const [tok, setToken] = useState();
   const dispatch = useDispatch();
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -18,15 +20,20 @@ function App() {
             'Content-Type': 'application/json',
         }
     }).then((response) => {
+
        sessionStorage.setItem('token',response.data.results.token);
+       setToken(response.data.results.token)
        requestUser();
+      requestUserdropdown();
     })
 }
   useEffect(() => {
     requestLogin();
+    // requestUserdropdown();
     dispatch(get_task());
   // eslint-disable-next-line no-use-before-define
-  },[dispatch, requestLogin])
+  requestUserdropdown();
+  },[])
 
 
 const requestUser = async () => {
@@ -39,10 +46,28 @@ const requestUser = async () => {
   });
   sessionStorage.setItem('userId', response.data.results.user_id);
 }
+const requestUserdropdown = async () => {
+  const tokVal = sessionStorage.getItem("token") ? sessionStorage.getItem("token") : tok;
+  await axios.get(`https://stage.api.sloovi.com/team`, {
+    headers: {
+      'Authorization': 'Bearer ' +  tokVal,
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  }).then((data) => {
+    sessionStorage.setItem('dropdownList',data.data.results.data)
+    setDropdown(data.data.results.data)
+})
+}
+
   return (
     <div className="App">
-      <Tasks/>
-    </div>
+      {/* <div> */}
+        <div className="header-bar">
+          </div>
+      <div>
+        <Tasks dropdown={dropdown}/></div>
+     </div>
   );
 }
 

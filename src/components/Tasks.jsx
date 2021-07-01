@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import DatePicker from "react-datepicker";
+import $ from 'jquery';
 import {
   get_task,
   add_new_task,
@@ -19,10 +20,29 @@ import { TiDocumentText } from 'react-icons/ti';
 import { FiCalendar } from 'react-icons/fi';
 import { TiArrowUnsorted } from 'react-icons/ti';
 import { FiClock } from 'react-icons/fi';
+import { Times } from '../constants/constants'
 
 import moment  from "moment";
 
-export const Tasks = () => {
+const useOutsideAlerter =(ref)=> {
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (ref.current && !ref.current.contains(event.target)) {
+        var parentTimediv = document.getElementsByClassName('dropdownParent')[0];
+        parentTimediv.style.display="none";
+      }
+  }
+  document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+  })
+}
+
+export const Tasks = (Dropdata) => {
+  // console.log('droooppppoooooiiii',data);
+  const [dropdowndata, Setdata] = useState(Dropdata);
+  // console.log('tooooo',Dropdata);
   const [name, setName] = useState("");
   const [date, setDate] = useState();
   const [toMap, setArray] = useState([]);
@@ -31,7 +51,13 @@ export const Tasks = () => {
   const [editFlag, setEditFlag] = useState(false);
   const [time,setTime] = useState();
   const [taskCount,setArrayLength] = useState();
+  const [user_name,setAssignUsr] = useState("");
+  const [arrayTime,setTimeArray] = useState(Times);
+  // const [setTimeddiv, setClickedTimediv] = useState(true);
+  const wrapperRef = useRef(null)
   const dispatch = useDispatch();
+
+  useOutsideAlerter(wrapperRef);
 
   const taskb = useSelector((state) => state.tasks.task);
   const editTask = useSelector((state) => state.tasks.data)
@@ -41,6 +67,7 @@ export const Tasks = () => {
     setArrayLength(taskb &&  taskb.results ? taskb.results.length : 0);
     if (editTask !== undefined) {
       const data = editTask.data.results;
+      setAssignUsr(data.user_name)
       setName(data.task_msg);
       setDate(moment(data.task_date)._d)
       dateFormatingUsingVanilaJs(data.task_time);
@@ -51,13 +78,16 @@ export const Tasks = () => {
     if (taskb !== undefined) {
       return setArray(taskb.results);
     }
+    // setTimeArray(Time)
+    Setdata(Dropdata)
   }, [dispatch, editTask, singleUser, taskb]);
 
   const dateFormatingUsingVanilaJs = (dataa) => {
     const dateToShow =  dataa && dataa.toString().length === 3 ?
     [dataa.toString().slice(0,1),":",dataa.toString().slice(1)].join('') :
     [dataa.toString().slice(0,2),":",dataa.toString().slice(2)].join('')
-    const updatedTime = dataa < 1159 ? dateToShow + ' am' : dateToShow + ' pm';
+    console.log('ffffffffffff',dataa)
+    const updatedTime = dataa > 100 && dataa < 700 ? dateToShow + ' pm' : dateToShow + ' am';
     setTime(updatedTime);
   }
 
@@ -66,7 +96,7 @@ export const Tasks = () => {
     dispatch(
       add_new_task({
         payload: {
-          assigned_user: sessionStorage.getItem("userId"),
+          assigned_user: sessionStorage.getItem("assigned_user") ? sessionStorage.getItem("assigned_user") : sessionStorage.getItem("userId"),
           task_date: moment(date).format('YYYY-MM-DD'),
           task_time: parseInt(time.replace(/[^0-9]/g, '')),
           is_completed: 0,
@@ -86,6 +116,7 @@ export const Tasks = () => {
     setName("");
     setDate("");
     setTime("");
+    setAssignUsr("");
   };
   const handleEditTask = (id) => {
     dispatch(get_single_task({ payload: id }));
@@ -103,7 +134,7 @@ export const Tasks = () => {
       edit_task({
         taskId: data.data.results.id,
         payload: {
-          assigned_user: sessionStorage.getItem("userId"),
+          assigned_user: sessionStorage.getItem("assigned_user") ? sessionStorage.getItem("assigned_user") : sessionStorage.getItem("userId") ,
           task_date: moment(date).format('YYYY-MM-DD'),
           task_time: parseInt(time.replace(/[^0-9]/g, '')),
           is_completed: 0,
@@ -120,10 +151,11 @@ export const Tasks = () => {
 
   return (
     <div>
+      <div className="sidebarBlue"></div>
       <div className="top-parent">
         <div className="inner-parent">
           <div className="header">
-          <div><span className="headerspan"><b>TASKS</b> <span className="count">{taskCount}</span></span></div>
+          <div><span className="headerspan">TASKS  <span className="count">{taskCount}</span></span></div>
           <div className="buttonToggleParent"><button className="buttonToggle" type="button" onClick={toggleForm}>
             <FaPlus color="#6C6C6D" fontSize="1.2em"/>
             </button>
@@ -137,7 +169,7 @@ export const Tasks = () => {
               <form className="add-form" onSubmit={handleSumit}>
                 <div className="tasksHeader">
                   <label className="task-desc-header">Task Description</label>
-                  <div>
+                  <div className="task-input">
                   <input
                     className="task-name"
                     type="text"
@@ -145,16 +177,17 @@ export const Tasks = () => {
                     onChange={(e) => {
                       setName(e.target.value);
                     }}
+                    placeholder="Task Description"
                     required
                   />
-                <span><TiDocumentText/></span>
+                <div className="tiDocClass"><span className="TiDoc"><TiDocumentText size={20}/></span></div>
                 </div>
                 </div>
                 <div className="dateandtime">
-                  <div>
+                  <div className="dateandtimrInner">
                     <label className="lableDate">Date</label>
                     <div className="dateParent">
-                    <span className="calender"><FiCalendar size={13}/></span>
+                    <span className="calender"><FiCalendar size={17}/></span>
                     <DatePicker
                       dateFormat="yyyy-MM-dd"
                       onChange={(e) => {
@@ -162,6 +195,7 @@ export const Tasks = () => {
                       }}
                       selected={date}
                       className="inputdate"
+                      placeholderText="Date"
                       required
                     />
                     </div>
@@ -170,45 +204,49 @@ export const Tasks = () => {
                   <label><span className="timetext">Time</span>
                   </label>
                   <div className="timeDiv">
-                  <span className="clockClass"><FiClock size={13}/></span>
+                  <span className="clockClass"><FiClock size={17}/></span>
                     <input list="time" onChange={(e) => {
-                      setTime(e.target.value);
+                      console.log('eeee',e)
+                      // setTime(e.target.value);
+                    }}
+                    value={time}
+                    onFocus={(e) => {
+                      var parentTimediv = document.getElementsByClassName('dropdownParent')[0];
+                      parentTimediv.style.display="block";
                     }}
                     className="timeInput"
                     name="timeSelect"
-                    value={time}
-                    required />
+                    placeholder="Time"
+                    autoComplete="off"
+                    required
+                    />
                     </div>
-                    <datalist id="time">
-                      <option value="8 am"></option>
-                      <option value="8:30 am"></option>
-                      <option value="9 am"></option>
-                      <option value="9:30 am"></option>
-                      <option value="10 am"></option>
-                      <option value="10:30 am"></option>
-                      <option value="11 am"></option>
-                      <option value="11:30 am"></option>
-                      <option value="12 pm"></option>
-                      <option value="12:30 pm"></option>
-                      <option value="1 pm"></option>
-                      <option value="1:30 pm"></option>
-                    </datalist>
+                    <div>
+                      <div className="dropdownParent" ref={wrapperRef}>
+                        {arrayTime.map((data) => {
+                          return <div className="dropdownSingleItem" onClick={(e) => {
+                            setTime(e.target.textContent);
+                            var parentTimediv = document.getElementsByClassName('dropdownParent')[0];
+                            parentTimediv.style.display="none";
+                          }}>{data}</div>
+                        })}
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div className="tasksHeader">
                   <label className="task-desc-header">Assign user</label>
-                  <div>
-                  <input
-                    className="task-name"
-                    type="text"
-                    value={'Prem Kumar'}
-                    onChange={(e) => {
-                      // setName(e.target.value);`
-                    }}
-                    readOnly
-                    required
-                  />
-                <span><TiArrowUnsorted/></span>
+                  <div className="task-input">
+
+                  <select id="browsers"  onChange={(e) => {
+                    sessionStorage.setItem("assigned_user",e.target.value)
+                  }}>
+                    {
+                     Dropdata.dropdown && Dropdata.dropdown.length > 0 ? Dropdata.dropdown.map((data) => {
+                       return <option value={data.user_id}>{data.name}</option>
+                    }):''}
+                </select>
+                <div className="tiDocClass tiDocClassTwo"><span><TiArrowUnsorted size={18}/></span></div>
                 </div>
                 </div>
                 <div className="actionButtons">
